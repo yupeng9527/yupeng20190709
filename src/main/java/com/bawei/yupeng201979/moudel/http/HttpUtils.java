@@ -17,28 +17,29 @@ import java.net.URL;
  * 创建时间：
  * 具体功能：
  */public class HttpUtils {
-     private static HttpUtils httpUtils = new HttpUtils();
-     private HttpUtils(){
-
-     }
-     public static HttpUtils getInstance(){
-         return httpUtils;
-     }
+    private static HttpUtils httpUtils = new HttpUtils();
+    private HttpUtils(){}
+    public static HttpUtils getInstance(){
+        return httpUtils;
+    }
     public String getstring(String strurl){
         HttpURLConnection connection = null;
         try {
             URL url = new URL(strurl);
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
             int code = connection.getResponseCode();
             if (code == 200){
                 InputStream stream = connection.getInputStream();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
                 StringBuffer buffer = new StringBuffer();
-                String st = "";
-                buffer.append(st);
+                String str = "";
+                while ((str = reader.readLine())!=null){
+                    buffer.append(str);
+                }
+                reader.close();
                 connection.disconnect();
                 return buffer.toString();
             }
@@ -47,7 +48,7 @@ import java.net.URL;
         }
         return "";
     }
-    public void Task(String strurk,final Back back){
+    public void Task(String strurk , final Back back){
         new AsyncTask<String, Integer, String>() {
             @Override
             protected String doInBackground(String... strings) {
